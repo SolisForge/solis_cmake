@@ -4,7 +4,7 @@
 # This file contains the function definition to display message
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      11/10/2025 (created 11/10/2025)
+# Date      12/10/2025 (created 11/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -32,27 +32,48 @@ endfunction()
 # Display a new step
 #
 # Author: Meltwin
-# Since : 0.0.1
+# Since : 1.0.0
 # =============================================================================
 function(log_step step_name)
-    message("+ ${step_name}")
+    message("${TERM_BOLD_RED}+ ${TERM_UNDER_BLUE}${step_name}")
 endfunction()
+
+# =============================================================================
+# Specialization of log_step to print a new target
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(log_target _target _type)
+    log_step("Configuring ${_type} target ${TERM_UNDER_YELLOW}\"${_target}\"${TERM_UNDER_BLUE}")
+endfunction()
+
+# =============================================================================
+# Display debug messages
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(log_debug msg)
+    message(VERBOSE "${msg}")
+endfunction()
+
+# =============================================================================
+# Display error messages
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+macro(log_error msg)
+    message(SEND_ERROR " ${TERM_BOLD_RED}${msg}")
+endmacro()
 
 # =============================================================================
 # Display output lines (for subprocess stdout)
 #
 # Author: Meltwin
-# Since : 0.0.1
+# Since : 1.0.0
 # =============================================================================
-function(begin_output)
-    message("${TERM_BACK_DIM_BLACK}${TERM_BLUE}")
-endfunction()
-
-function(end_output)
-    message("${TERM_CLR}")
-endfunction()
-
 function(log_output msg)
-    string(REGEX MATCHALL "[^\n\r]+" LINES ${msg})
     message("${TERM_DIM_WHITE}${msg}")
 endfunction()

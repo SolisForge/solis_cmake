@@ -1,26 +1,27 @@
 # =============================================================================
 # Project: SOLIS_CMAKE
 # 
-# This file contains util CMake methods.
+# Definition of CMake targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      16/09/2025 (created 16/09/2025)
+# Date      12/10/2025 (created 12/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
 # =============================================================================
-# Test if only one of the flag is ON.
+# Register a target to install CMake files into the output directory
 #
 # Author: Meltwin
-# Since: 0.0.1
+# Since : 1.0.0
 # =============================================================================
-function(only_one_flag out)
-    list(LENGTH ARGN length)
-    if (${length} EQUAL 1)
-        set(${out} TRUE PARENT_SCOPE)
-    else()
-        set(${out} FALSE PARENT_SCOPE)
-    endif()
-endfunction()
+macro(add_solis_cmake)
+    cmake_parse_arguments("" "" "" "FILES;DIRECTORIES" ${ARGN})
+    get_files(cmake_files EXT ".cmake" FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
+    log_step("Registering CMake files")
+    solis_register(CMAKE "${cmake_files}")
+
+    # Cleaning local variables
+    unset(cmake_files)
+endmacro()

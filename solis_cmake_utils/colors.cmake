@@ -4,7 +4,7 @@
 # Color code for CMake message outputs
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      11/10/2025 (created 11/10/2025)
+# Date      12/10/2025 (created 11/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -139,6 +139,7 @@ macro(_build_colors_from_code _name)
     make_fore_color(TERM_LIGHT_${_name} _TERM_${_name}_CODE BRIGHT)
     make_fore_color(TERM_DIM_${_name} _TERM_${_name}_CODE DIM)
     make_fore_color(TERM_BOLD_${_name} _TERM_${_name}_CODE BOLD)
+    make_fore_color(TERM_UNDER_${_name} _TERM_${_name}_CODE UNDER)
     make_back_color(TERM_BACK_${_name} _TERM_${_name}_CODE)
     make_back_color(TERM_BACK_LIGHT_${_name} _TERM_${_name}_CODE BRIGHT)
     make_back_color(TERM_BACK_DIM_${_name} _TERM_${_name}_CODE DIM)
