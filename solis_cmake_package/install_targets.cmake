@@ -1,26 +1,29 @@
 # =============================================================================
 # Project: SOLIS_CMAKE
 # 
-# This file contains util CMake methods.
+# This file contains the several functions used to install the diverse targets
+# define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      16/09/2025 (created 16/09/2025)
+# Date      17/10/2025 (created 17/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
 # =============================================================================
-# Test if only one of the flag is ON.
+# Export the project CMake files
 #
 # Author: Meltwin
-# Since: 0.0.1
+# Since 0.0.1
 # =============================================================================
-function(only_one_flag out)
-    list(LENGTH ARGN length)
-    if (${length} EQUAL 1)
-        set(${out} TRUE PARENT_SCOPE)
-    else()
-        set(${out} FALSE PARENT_SCOPE)
-    endif()
+function(_solis_install_cmake)
+  get_solis_cache(TARGET _reg _doc CMAKE)
+  if (NOT "${${_reg}}" STREQUAL "")
+    log_step("Exporting CMake files for package \"${PROJECT_NAME}\"")
+    install(
+        FILES ${${_reg}}
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}"
+    )
+  endif()
 endfunction()
