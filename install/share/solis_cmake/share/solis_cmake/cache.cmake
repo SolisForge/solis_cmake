@@ -4,7 +4,7 @@
 # This file contains all the function related to manipulating the cache
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      17/10/2025 (created 14/10/2025)
+# Date      16/10/2025 (created 14/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)

@@ -4,7 +4,7 @@
 # Configuration file for this project
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      16/10/2025 (created 16/09/2025)
+# Date      17/10/2025 (created 16/09/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -22,10 +22,10 @@ clear_solis_caches()
 log_section("Configuring package [solis_cmake]")
 
 add_solis_cmake(cmake_files
-    DIRECTORIES "solis_cmake_utils" "solis_cmake_targets" "solis_cmake_package"
+    DIRECTORIES "solis_cmake_utils" 
+                "solis_cmake_targets" 
+                "solis_cmake_package"
 )
-
-message("CMake: ${${PROJECT_NAME}_TARGETS_CMAKE}")
 
 
 # Package this project

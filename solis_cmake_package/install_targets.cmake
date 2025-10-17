@@ -1,28 +1,29 @@
 # =============================================================================
 # Project: SOLIS_CMAKE
 # 
-# This file contains the include calls for all packaging CMake functions.
+# This file contains the several functions used to install the diverse targets
+# define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      17/10/2025 (created 11/10/2025)
+# Date      17/10/2025 (created 17/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
-include(${CMAKE_CURRENT_LIST_DIR}/install_targets.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/make_config.cmake)
-
 # =============================================================================
-# Launch the packaging sequence of the project
+# Export the project CMake files
 #
 # Author: Meltwin
-# Since: 0.0.1
+# Since 0.0.1
 # =============================================================================
-function(solis_package)
-    log_section("Packaging the project" ORIGIN "solis")
-    _solis_install_cmake()
-    mk_solis_config()
+function(_solis_install_cmake)
+  get_solis_cache(TARGET _reg _doc CMAKE)
+  if (NOT "${${_reg}}" STREQUAL "")
+    log_step("Exporting CMake files for package \"${PROJECT_NAME}\"")
+    install(
+        FILES ${${_reg}}
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}"
+    )
+  endif()
 endfunction()
