@@ -4,7 +4,7 @@
 # This file contains the function definition to display message
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      12/10/2025 (created 11/10/2025)
+# Date      18/10/2025 (created 11/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -64,6 +64,9 @@ endfunction()
 # Author: Meltwin
 # Since : 1.0.0
 # =============================================================================
+macro(log_warning msg)
+    message(AUTHOR_WARNING " ${TERM_BOLD_YELLOW}${msg}")
+endmacro()
 macro(log_error msg)
     message(SEND_ERROR " ${TERM_BOLD_RED}${msg}")
 endmacro()

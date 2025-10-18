@@ -5,13 +5,11 @@
 # targets.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      17/10/2025 (created 14/10/2025)
+# Date      18/10/2025 (created 14/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
-
-set(_SOLIS_TARGET_CACHES_TYPE "CMAKE;CXX;PY")
 
 # =============================================================================
 # Register a target for autonomous packaging by the solis stack.
@@ -19,9 +17,26 @@ set(_SOLIS_TARGET_CACHES_TYPE "CMAKE;CXX;PY")
 # Author: Meltwin
 # Since : 1.0.0
 # =============================================================================
-function(solis_register_target _type)
+function(register_solis_target _type)
     add_to_solis_cache(TARGET "${_type}" VALUES "${ARGN}")
 endfunction()
+
+# =============================================================================
+# Get the targets of the given types
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(get_solis_targets _out)
+    set(${_out} "")
+    foreach(_type ${ARGN})
+        get_from_solis_cache(TARGET _values "${_type}")
+        list(APPEND ${_out} ${_values})
+    endforeach()
+    return(PROPAGATE ${_out})
+endfunction()
+
+set(_SOLIS_TARGET_CACHES_TYPE "CMAKE" "CXX_EXE" "CXX_LIB" "PY")
 
 # =============================================================================
 # Get a register variable for a target
@@ -30,8 +45,7 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(__get_solis_target_cache_var _out _type)
-    list(FIND _SOLIS_TARGET_CACHES_TYPE "${_type}" _lst_index)
-    if( ${_lst_index} GREATER -1)
+    if("${_type}" IN_LIST _SOLIS_TARGET_CACHES_TYPE)
         set(${_out} ${PROJECT_NAME}_TARGETS_${_type})
     else()
         log_error("Unknown target type ${_type}. Valid values are: ${_SOLIS_TARGET_CACHES_TYPE}")
@@ -48,10 +62,15 @@ endfunction()
 function(__get_solis_target_cache_doc _out _type)
     if("${_type}" STREQUAL "CMAKE")
         set(${_out} "CMake files to install")
-    elseif ("${_type}" STREQUAL "CXX")
-        set(${_out} "CMake files to install")
+    elseif ("${_type}" STREQUAL "CXX_EXE")
+        set(${_out} "C/C++ executable targets to compile")
+    elseif ("${_type}" STREQUAL "CXX_LIB")
+        set(${_out} "C/C++ library targets to compile")
+    elseif("${_type}" IN_LIST _SOLIS_TARGET_CACHES_TYPE)
+        set(${_out} "Unformated doc")
+        log_warning("Document for target cache ${_type} is not written!")
     else()
-        log_error("Unknown target type ${_type}. Valid values are: ${_SOLIS_TARGET_REGISTERS}")
+        log_error("Unknown target type ${_type}. Valid values are: ${_SOLIS_TARGET_CACHES_TYPE}")
     endif()
     return(PROPAGATE ${_out})
 endfunction()

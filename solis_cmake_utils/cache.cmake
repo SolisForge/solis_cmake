@@ -4,7 +4,7 @@
 # This file contains all the function related to manipulating the cache
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      17/10/2025 (created 14/10/2025)
+# Date      18/10/2025 (created 14/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -59,6 +59,17 @@ endfunction()
 function(add_to_solis_cache _type)
     cmake_parse_arguments("" "" "" "VALUES" ${ARGN}) 
     get_solis_cache(${_type} _REG _DOC ${_UNPARSED_ARGUMENTS})
-    list(APPEND ${_REG} ${_VALUES})
+    list(APPEND "${_REG}" "${_VALUES}")
     set(${_REG} "${${_REG}}" CACHE STRING "${_DOC}" FORCE)
+endfunction()
+
+# =============================================================================
+# Get the values from the requested cache
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(get_from_solis_cache _type _out)
+    get_solis_cache(${_type} _REG _DOC ${ARGN})
+    set(${_out} ${${_REG}} PARENT_SCOPE)
 endfunction()
