@@ -4,7 +4,7 @@
 # Configuration file for this project
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 16/09/2025)
+# Date      18/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -25,6 +25,8 @@ add_solis_cmake_module(
                 "solis_cmake_targets" 
                 "solis_cmake_package"
 )
+# Add functions to be run for each project running on solis_cmake
+add_solis_cmake(FILES "special/auto_run.cmake")
 
 # Package this project
 solis_package()

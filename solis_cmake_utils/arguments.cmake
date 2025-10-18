@@ -62,12 +62,10 @@ function(get_files src_out)
   endforeach()
 
   # Parse files
-  if ("${_FILES}")
-    foreach(f ${_FILE})
-      log_debug("Adding file ${f}")
-    endforeach()
-    list(APPEND src_files "${_FILE}")
-  endif()
+  foreach(f ${_FILE})
+    log_debug("Adding file ${f}")
+  endforeach()
+  list(APPEND src_files "${_FILE}")
 
   # Return the found files
   set(${src_out} "${src_files}" PARENT_SCOPE)

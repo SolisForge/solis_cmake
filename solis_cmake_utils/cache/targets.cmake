@@ -5,7 +5,7 @@
 # targets.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 14/10/2025)
+# Date      18/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -31,7 +31,7 @@ function(get_solis_targets _out)
     set(${_out} "")
     foreach(_type ${ARGN})
         get_from_solis_cache(TARGET _values "${_type}")
-        list(APPEND ${_out} ${_values})
+        list(APPEND ${_out} "${_values}")
     endforeach()
     return(PROPAGATE ${_out})
 endfunction()
