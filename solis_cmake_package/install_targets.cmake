@@ -22,10 +22,11 @@ function(_solis_install_cmake)
   list(LENGTH _targets _length)
   if (_length GREATER 0)
     log_step("Exporting CMake files (${_length} files)")
-    install(
-        FILES ${_targets}
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}"
-    )
+    # Install each file independently to keep folder hierarchy
+    foreach (_cmake_file ${_targets} )
+      get_filename_component( _cmake_dir ${_cmake_file} DIRECTORY )
+      install(FILES ${_cmake_file} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}/${_cmake_dir}")
+    endforeach()
   endif()
 endfunction()
 
