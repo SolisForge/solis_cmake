@@ -4,7 +4,7 @@
 # This file contains the include calls for all packaging CMake functions.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 11/10/2025)
+# Date      18/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -12,6 +12,12 @@
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+
+if (WIN32)
+    set(IS_WIN "1")
+else()
+    set(IS_WIN "0")
+endif()
 
 # =============================================================================
 # Define some directory short-hand for configuring the project
@@ -21,7 +27,7 @@ set(PROJECT_BUILD_DATAROOTDIR "${PROJECT_BINARY_DIR}/share")
 # Build directory to generate CMake files
 set(PROJECT_BUILD_CMAKEDIR "${PROJECT_BUILD_DATAROOTDIR}/${PROJECT_NAME}/cmake")
 # Directory in which to install CMake files
-set(PROJECT_INSTALL_CMAKEDIR "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}")
+set(PROJECT_INSTALL_CMAKEDIR "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}")
 
 # =============================================================================
 # Include all function of this module

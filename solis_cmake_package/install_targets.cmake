@@ -5,7 +5,7 @@
 # define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 17/10/2025)
+# Date      18/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -26,7 +26,7 @@ function(_solis_install_cmake)
     # Install each file independently to keep folder hierarchy
     foreach (_cmake_file ${_targets} )
       get_filename_component( _cmake_dir ${_cmake_file} DIRECTORY )
-      install(FILES ${_cmake_file} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}/${_cmake_dir}")
+      install(FILES ${_cmake_file} DESTINATION "${PROJECT_INSTALL_CMAKEDIR}/${_cmake_dir}")
     endforeach()
   endif()
 endfunction()
