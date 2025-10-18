@@ -20,7 +20,7 @@ include(solis_cmake_package/solis_cmake_package.cmake)
 clear_solis_caches()
 log_section("Configuring package \"${PROJECT_NAME}\"" ORIGIN "solis")
 
-add_solis_cmake(cmake_files
+add_solis_cmake_module(
     DIRECTORIES "solis_cmake_utils" 
                 "solis_cmake_targets" 
                 "solis_cmake_package"

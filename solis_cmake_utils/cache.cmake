@@ -18,6 +18,7 @@ macro(_register_solis_cache _reg)
     list(APPEND ${PROJECT_NAME}_ALL_CACHED_REGISTER ${_reg})
 endmacro()
 include(${CMAKE_CURRENT_LIST_DIR}/cache/targets.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cache/project.cmake)
 
 # =============================================================================
 # Clear all cached registers defined by the solis environment.
@@ -51,7 +52,10 @@ function(get_solis_cache _type _register_var _docstring)
 endfunction()
 
 # =============================================================================
-# Append the given value to the correspoding cache
+# Append the given value to the correspoding cache.
+# Should not be called directly, prefer using the special implementation as
+#   - register_solis_target for targets
+#   - ...
 #
 # Author: Meltwin
 # Since : 1.0.0
@@ -61,6 +65,19 @@ function(add_to_solis_cache _type)
     get_solis_cache(${_type} _REG _DOC ${_UNPARSED_ARGUMENTS})
     list(APPEND "${_REG}" "${_VALUES}")
     set(${_REG} "${${_REG}}" CACHE STRING "${_DOC}" FORCE)
+endfunction()
+
+# =============================================================================
+# Set the cache with the given value.
+# Should not be called directly, prefer using the special implementation.
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(set_solis_cache _type)
+    cmake_parse_arguments("" "" "" "VALUES" ${ARGN}) 
+    get_solis_cache(${_type} _REG _DOC ${_UNPARSED_ARGUMENTS})
+    set(${_REG} "${_VALUES}" CACHE STRING "${_DOC}" FORCE)
 endfunction()
 
 # =============================================================================

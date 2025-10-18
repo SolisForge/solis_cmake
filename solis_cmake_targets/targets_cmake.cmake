@@ -17,8 +17,40 @@
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_cmake)
-    cmake_parse_arguments("" "" "" "FILES;DIRECTORIES" ${ARGN})
+    cmake_parse_arguments("" "NO_AUTO_LOAD" "" "FILES;DIRECTORIES" ${ARGN})
     get_files(cmake_files EXT ".cmake" FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
     log_step("Registering CMake files")
-    register_solis_target(CMAKE "${cmake_files}")
+    if (_NO_AUTO_LOAD)
+        register_solis_target(CMAKE_NOLOAD "${cmake_files}")
+    else()
+        register_solis_target(CMAKE "${cmake_files}")
+    endif()
+endfunction()
+
+# =============================================================================
+# Add a CMake module to the install path and load it automatically
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(add_solis_cmake_module)
+    cmake_parse_arguments("" "" "" "DIRECTORIES" ${ARGN})
+    foreach(_dir ${_DIRECTORIES})
+        log_step("Registering CMake module \"${_dir}\"")
+        
+        # Check for entrypoint in module
+        # TODO: improve by only taking last directory part for file name
+        set(entrypoint "${_dir}/${_dir}.cmake")
+        if (NOT EXISTS "${PROJECT_SOURCE_DIR}/${entrypoint}")
+            log_error("Entrypoing of CMake module ${entrypoint} cannot be found !")
+        endif()
+
+        # Get module files and register them as no_load (entrypoint will do it)
+        get_files(cmake_files EXT ".cmake" DIRECTORY "${_dir}")
+        register_solis_target(CMAKE_NOLOAD "${cmake_files}")
+        # Auto-load entrypoint
+        register_solis_target(CMAKE "${entrypoint}")
+        # Register module
+        register_solis_target(CMAKE_MODULE "${_dir}")
+    endforeach()
 endfunction()

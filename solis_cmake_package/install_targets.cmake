@@ -18,7 +18,8 @@
 # Since 0.0.1
 # =============================================================================
 function(_solis_install_cmake)
-  get_solis_targets(_targets CMAKE)
+  # Get all CMake files to install
+  get_solis_targets(_targets CMAKE CMAKE_NOLOAD)
   list(LENGTH _targets _length)
   if (_length GREATER 0)
     log_step("Exporting CMake files (${_length} files)")
