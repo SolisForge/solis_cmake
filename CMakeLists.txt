@@ -26,6 +26,5 @@ add_solis_cmake(cmake_files
                 "solis_cmake_package"
 )
 
-
 # Package this project
 solis_package()
