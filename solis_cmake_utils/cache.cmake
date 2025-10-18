@@ -4,7 +4,7 @@
 # This file contains all the function related to manipulating the cache
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      17/10/2025 (created 14/10/2025)
+# Date      18/10/2025 (created 14/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -18,6 +18,7 @@ macro(_register_solis_cache _reg)
     list(APPEND ${PROJECT_NAME}_ALL_CACHED_REGISTER ${_reg})
 endmacro()
 include(${CMAKE_CURRENT_LIST_DIR}/cache/targets.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cache/project.cmake)
 
 # =============================================================================
 # Clear all cached registers defined by the solis environment.
@@ -51,7 +52,10 @@ function(get_solis_cache _type _register_var _docstring)
 endfunction()
 
 # =============================================================================
-# Append the given value to the correspoding cache
+# Append the given value to the correspoding cache.
+# Should not be called directly, prefer using the special implementation as
+#   - register_solis_target for targets
+#   - ...
 #
 # Author: Meltwin
 # Since : 1.0.0
@@ -59,6 +63,30 @@ endfunction()
 function(add_to_solis_cache _type)
     cmake_parse_arguments("" "" "" "VALUES" ${ARGN}) 
     get_solis_cache(${_type} _REG _DOC ${_UNPARSED_ARGUMENTS})
-    list(APPEND ${_REG} ${_VALUES})
+    list(APPEND "${_REG}" "${_VALUES}")
     set(${_REG} "${${_REG}}" CACHE STRING "${_DOC}" FORCE)
+endfunction()
+
+# =============================================================================
+# Set the cache with the given value.
+# Should not be called directly, prefer using the special implementation.
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(set_solis_cache _type)
+    cmake_parse_arguments("" "" "" "VALUES" ${ARGN}) 
+    get_solis_cache(${_type} _REG _DOC ${_UNPARSED_ARGUMENTS})
+    set(${_REG} "${_VALUES}" CACHE STRING "${_DOC}" FORCE)
+endfunction()
+
+# =============================================================================
+# Get the values from the requested cache
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(get_from_solis_cache _type _out)
+    get_solis_cache(${_type} _REG _DOC ${ARGN})
+    set(${_out} ${${_REG}} PARENT_SCOPE)
 endfunction()
