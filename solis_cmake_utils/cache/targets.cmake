@@ -5,7 +5,7 @@
 # targets.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 18/10/2025)
+# Date      19/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -36,7 +36,11 @@ function(get_solis_targets _out)
     return(PROPAGATE ${_out})
 endfunction()
 
-set(_SOLIS_TARGET_CACHES_TYPE "CMAKE" "CMAKE_NOLOAD" "CMAKE_MODULE" "CXX_EXE" "CXX_LIB" "PY")
+set(_SOLIS_TARGET_CACHES_TYPE 
+    "CMAKE" "CMAKE_NOLOAD" "CMAKE_MODULE" 
+    "CXX_EXE" "CXX_LIB" 
+    "PY_MODULE"
+)
 
 # =============================================================================
 # Get a register variable for a target
@@ -69,6 +73,8 @@ function(__get_solis_target_cache_doc _out _type)
     elseif ("${_type}" STREQUAL "CXX_EXE")
         set(${_out} "C/C++ executable targets to compile")
     elseif ("${_type}" STREQUAL "CXX_LIB")
+        set(${_out} "C/C++ library targets to compile")
+    elseif ("${_type}" STREQUAL "PY_MODULE")
         set(${_out} "C/C++ library targets to compile")
     elseif("${_type}" IN_LIST _SOLIS_TARGET_CACHES_TYPE)
         set(${_out} "Unformated doc")

@@ -5,7 +5,7 @@
 # define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 18/10/2025)
+# Date      19/10/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -35,7 +35,7 @@ endfunction()
 # Export the project's CXX targets
 #
 # Author: Meltwin
-# Since 0.0.1
+# Since : 1.0.0
 # =============================================================================
 function(_solis_install_cxx)
   get_solis_targets(_targets CXX_EXE CXX_LIB)
@@ -58,5 +58,36 @@ function(_solis_install_cxx)
     install(EXPORT "${PROJECT_NAME}Targets"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}
     )
+  endif()
+endfunction()
+
+# =============================================================================
+# Export the project's Python modules
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(_solis_install_python_modules)
+  # Get all Python modules to install
+  get_solis_targets(_modules PY_MODULE)
+  list(LENGTH _modules _length)
+  if (_length GREATER 0)
+    foreach (_py_module ${_modules})
+      # Find target-path delimiter and get their values
+      string(FIND "${_py_module}" "&" dlim_position)
+      string(SUBSTRING "${_py_module}" 0 ${dlim_position} _target)
+      string(LENGTH "${_py_module}" whole_length)
+      math(EXPR path_start  "${dlim_position} + 1")
+      math(EXPR path_length "${whole_length} - ${dlim_position} - 1")
+      string(SUBSTRING "${_py_module}" ${path_start} ${path_length} _py_path)
+
+      log_step("Exporting Python module \"${_target}\" from directory \"${_py_path}\"")
+
+      # Exporting all files under the given directory into the Python package module
+      install(
+        DIRECTORY "${_py_path}/"
+        DESTINATION "${PROJECT_INSTALL_PYTHONDIR}/${_target}"
+      )
+    endforeach()
   endif()
 endfunction()
