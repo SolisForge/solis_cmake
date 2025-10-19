@@ -19,6 +19,14 @@
 function(add_solis_python _target _directory)    
     log_step("Registering Python module \"${_target}\"")
 
+    # Check target_name
+    string(FIND "${_target}" "&" delim_exist)
+    if (${delim_exist} GREATER -1)
+        log_error("Python module name cannot contain the character \"&\"")
+    endif()
+    # Change "." to "/" delimitation in target name to make it a relative path
+    string(REPLACE "." "/" formatted_target "${_target}")
+
     # Register module to be exported
-    register_solis_target(PY_MODULE "${_target}&${_directory}")
+    register_solis_target(PY_MODULE "${formatted_target}&${_directory}")
 endfunction()
