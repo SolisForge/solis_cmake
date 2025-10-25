@@ -10,5 +10,5 @@
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
-log_section("Configuring package \"${PROJECT_NAME}\"" ORIGIN "solis-project")
+log_section("Configuring project \"${PROJECT_NAME}\"" ORIGIN "solis-project")
 clear_solis_caches()

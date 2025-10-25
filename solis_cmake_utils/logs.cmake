@@ -4,7 +4,7 @@
 # This file contains the function definition to display message
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 11/10/2025)
+# Date      25/10/2025 (created 25/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -25,7 +25,8 @@ function(log_section section_name)
 
     # Print string
     string(TOUPPER ${section_name} upper_name)
-    message("${TERM_DIM_BLUE}------ ${TERM_BOLD_RED}${_prefix}${upper_name}${TERM_DIM_BLUE} ------${TERM_CLR}")
+    center_text("${TERM_BOLD_RED}${_prefix}${upper_name}${TERM_DIM_BLUE}" 80 section_header CHAR "-")
+    message("${TERM_DIM_BLUE}${section_header}${TERM_CLR}")
 endfunction()
 
 # =============================================================================
@@ -35,7 +36,7 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(log_step step_name)
-    message("${TERM_BOLD_RED}+ ${TERM_UNDER_BLUE}${step_name}")
+    message("${TERM_BOLD_RED}+ ${TERM_BLUE}${step_name}")
 endfunction()
 
 # =============================================================================
@@ -45,7 +46,7 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(log_target _target _type)
-    log_step("Configuring ${_type} target ${TERM_UNDER_YELLOW}\"${_target}\"${TERM_UNDER_BLUE}")
+    log_step("Configuring ${_type} target ${TERM_UNDER_YELLOW}\"${_target}\"")
 endfunction()
 
 # =============================================================================
