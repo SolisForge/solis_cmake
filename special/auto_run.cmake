@@ -4,11 +4,11 @@
 # This file will be loaded at each find_package of solis_package.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 18/10/2025)
+# Date      25/10/2025 (created 25/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
-log_section("Configuring package \"${PROJECT_NAME}\"" ORIGIN "solis")
+log_section("Configuring package \"${PROJECT_NAME}\"" ORIGIN "solis-project")
 clear_solis_caches()
