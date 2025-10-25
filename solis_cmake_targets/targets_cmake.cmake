@@ -4,7 +4,7 @@
 # Definition of CMake targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      18/10/2025 (created 12/10/2025)
+# Date      25/10/2025 (created 25/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -36,7 +36,7 @@ endfunction()
 function(add_solis_cmake_module)
     cmake_parse_arguments("" "" "" "DIRECTORIES" ${ARGN})
     foreach(_dir ${_DIRECTORIES})
-        log_step("Registering CMake module \"${_dir}\"")
+        log_target("${_dir}" CMAKE )
         
         # Check for entrypoint in module
         # TODO: improve by only taking last directory part for file name
