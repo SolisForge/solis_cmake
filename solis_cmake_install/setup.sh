@@ -21,6 +21,10 @@ function add_to_path() {
 }
 SOLIS_WS_INSTALL_ROOT="$(resolve_path "${BASH_SOURCE[0]}")"
 
+export PATH
+export PYTHONPATH
+export LD_LIBRARY_PATH
+
 # Setup paths for this workspace
 PATH=$(add_to_path "$SOLIS_WS_INSTALL_ROOT/bin" "$PATH")
 PYTHONPATH=$(add_to_path "$SOLIS_WS_INSTALL_ROOT/lib/python3/dist-packages" "$PYTHONPATH")
