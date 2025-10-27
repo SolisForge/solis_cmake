@@ -19,7 +19,17 @@ function add_to_path() {
         echo "$old_path"
     fi
 }
-SOLIS_WS_INSTALL_ROOT="$(resolve_path "${BASH_SOURCE[0]}")"
+function _resolve_sourced_file_directory() {
+    local -r shell_type="$(cat /proc/$$/comm)"
+
+    # When sourcing a file, zsh give its path as $0 and not in BASH_SOURCE
+    if [[ "$shell_type" =~ zsh ]]; then
+        resolve_path "$1"
+    elif [[ "$shell_type" =~ bash ]]; then
+        resolve_path "${BASH_SOURCE[0]}"
+    fi
+}
+SOLIS_WS_INSTALL_ROOT=$(_resolve_sourced_file_directory "$0")
 
 export PATH
 export PYTHONPATH
