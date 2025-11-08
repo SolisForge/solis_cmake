@@ -5,7 +5,7 @@
 # define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/10/2025 (created 18/10/2025)
+# Date      08/11/2025 (created 27/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -89,5 +89,44 @@ function(_solis_install_python_modules)
         DESTINATION "${PROJECT_INSTALL_PYTHONDIR}/${_target}"
       )
     endforeach()
+  endif()
+endfunction()
+
+# =============================================================================
+# Export the project's scripts
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(_solis_install_scripts)
+  # Get all platform-independant scripts to install
+  get_solis_targets(_scripts SCRIPT)
+  list(LENGTH _scripts _length)
+  if (_length GREATER 0)
+    install(
+      PROGRAMS ${_scripts}
+      DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+  endif()
+
+  # Platform-depend scripts
+  if (WIN32)
+    get_solis_targets(_scripts SCRIPT_WIN)
+    list(LENGTH _scripts _length)
+    if (_length GREATER 0)
+      install(
+        PROGRAMS ${_scripts}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+      )
+    endif()
+  else()
+    get_solis_targets(_scripts SCRIPT_LINUX)
+    list(LENGTH _scripts _length)
+    if (_length GREATER 0)
+      install(
+        PROGRAMS ${_scripts}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+      )
+    endif()
   endif()
 endfunction()

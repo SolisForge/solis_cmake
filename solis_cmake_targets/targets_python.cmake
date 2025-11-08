@@ -1,10 +1,10 @@
 # =============================================================================
 # Project: SOLIS_CMAKE
 # 
-# 
+# Definition of Python module targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/10/2025 (created 19/10/2025)
+# Date      08/11/2025 (created 19/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
