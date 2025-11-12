@@ -5,7 +5,7 @@
 # targets.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/10/2025 (created 18/10/2025)
+# Date      08/11/2025 (created 19/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -40,6 +40,7 @@ set(_SOLIS_TARGET_CACHES_TYPE
     "CMAKE" "CMAKE_NOLOAD" "CMAKE_MODULE" 
     "CXX_EXE" "CXX_LIB" 
     "PY_MODULE"
+    "SCRIPT" "SCRIPT_LINUX" "SCRIPT_WIN"
 )
 
 # =============================================================================
@@ -76,6 +77,12 @@ function(__get_solis_target_cache_doc _out _type)
         set(${_out} "C/C++ library targets to compile")
     elseif ("${_type}" STREQUAL "PY_MODULE")
         set(${_out} "C/C++ library targets to compile")
+    elseif ("${_type}" STREQUAL "SCRIPT")
+        set(${_out} "Platform-indepent scripts to install")
+    elseif ("${_type}" STREQUAL "SCRIPT_WIN")
+        set(${_out} "Windows scripts to install")
+    elseif ("${_type}" STREQUAL "SCRIPT_LINUX")
+        set(${_out} "Linux scripts to install")
     elseif("${_type}" IN_LIST _SOLIS_TARGET_CACHES_TYPE)
         set(${_out} "Unformated doc")
         log_warning("Documentation for target cache ${_type} is not written!")

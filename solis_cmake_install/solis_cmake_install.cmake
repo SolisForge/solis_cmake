@@ -4,7 +4,7 @@
 # This file contains the include calls for all exporting solis projects.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/10/2025 (created 25/10/2025)
+# Date      08/11/2025 (created 27/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -54,6 +54,7 @@ function(solis_install)
     _solis_install_cmake()
     _solis_install_cxx()
     _solis_install_python_modules()
+    _solis_install_scripts()
     # Make project's config file
     mk_solis_config()
     # Install environement
