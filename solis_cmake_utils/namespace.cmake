@@ -4,7 +4,7 @@
 # Target namespace mechanism to allow simpler usage in other packages.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/11/2025 (created 19/11/2025)
+# Date      22/11/2025 (created 19/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -58,10 +58,12 @@ function(solis_namespace _out)
         if ( "${_TARGET}" STREQUAL "" )
             set(${PRJ_NS} ${_SET} CACHE STRING "${PROJECT_NAMESPACE_DOCSTRING}" FORCE)
             register_solis_namespace(${PRJ_NS})
+            set(${_out} ${${PRJ_NS}})
         # B) Set target namespace
         else()
             set(${TARGET_NS} ${_SET} CACHE STRING "${TARGET_NAMESPACE_DOCSTRING}" FORCE)
             register_solis_namespace(${TARGET_NS})
+            set(${_out} ${${TARGET_NS}})
         endif()
     endif()
 

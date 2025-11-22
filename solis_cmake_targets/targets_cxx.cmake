@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/11/2025 (created 12/11/2025)
+# Date      22/11/2025 (created 22/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -47,7 +47,7 @@ function(add_solis_library _target)
     cmake_parse_arguments("" "SHARED" "NAMESPACE" "FILES;DIRECTORIES;DEPENDS;INCLUDES;INCLUDES_RAW" ${ARGN})
     
     # Get source files for library
-    solis_namespace(_ns TARGET ${_target} NAMESPACE ${_NAMESPACE})
+    solis_namespace(_ns TARGET ${_target} SET ${_NAMESPACE})
     set(lib_alias "${_ns}::${_target}")
     get_files(src_files EXT ${CPP_SOURCE_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
     if ("${src_files}" STREQUAL "")
