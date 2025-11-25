@@ -20,7 +20,7 @@ set(CPP_HEADER_EXT ".hpp" ".hxx" ".h")
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_executable _target)
-    cmake_parse_arguments("" "" "" "FILES;DIRECTORIES;DEPENDS;INCLUDES;INCLUDES_RAW" ${ARGN})
+    cmake_parse_arguments("" "" "" "FILES;DIRECTORIES;DEPENDS" ${ARGN})
     
     log_step("Registering CXX executable \"${_target}\"")
     get_files(src_files EXT ${CPP_SOURCE_EXT} ${CPP_HEADER_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
@@ -28,7 +28,7 @@ function(add_solis_executable _target)
         # Configure executable
         add_executable(${_target} ${src_files})
         add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
-        set_target_includes(${_target} INCLUDES "${_INCLUDES}" INCLUDES_RAW "${_INCLUDES_RAW}")
+        set_target_includes(${_target} ${_UNPARSED_ARGUMENTS})
 
         # Register executable to be exported
         register_solis_target(CXX_EXE "${_target}")
