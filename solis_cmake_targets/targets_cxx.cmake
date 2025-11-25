@@ -27,10 +27,10 @@ function(add_solis_executable _target)
     
     log_step("Registering CXX executable \"${_target}\"")
     get_files(src_files EXT ${CPP_SOURCE_EXT} ${CPP_HEADER_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
-    if (NOT "${src_files}" STREQUAL "")
+    if ("${src_files}" STREQUAL "")
         log_error("No source files found in the given FILES and DIRECTORIES tags for target \"${_target}\"")
     endif()
-    
+
     # Configure executable
     add_executable(${_target} ${src_files})
     add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
@@ -106,7 +106,6 @@ endfunction()
 # =============================================================================
 function(_solis_mk_shared_lib)
     cmake_parse_arguments("" "" "" "SOURCES" ${ARGN})
-    log_debug("Argn ${ARGN}")
 
     # Make library
     add_library(${_target} SHARED ${_SOURCES})
@@ -150,7 +149,6 @@ set(_SOLIS_PUB_HDRS_SET "pub_headers")
 # Since : 1.0.0
 # =============================================================================
 function(set_target_includes _target) 
-    log_debug("Argn ${ARGN}")
     cmake_parse_arguments("" "INTERFACE" "" "${_SOLIS_INCLUDE_ARGS}" ${ARGN})
 
     # Process interface special case
