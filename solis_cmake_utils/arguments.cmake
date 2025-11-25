@@ -63,6 +63,21 @@ macro(get_args_partition _out)
 endmacro()
 
 # =============================================================================
+# Set the out variable with the value contained in _var_in if it exist, else
+# set it with the given default value
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(set_or_default _out _var_in _default)    
+    if (${_var_in})
+        set(${_out} "${${_var_in}}" PARENT_SCOPE)
+    else()
+        set(${_out} "${_default}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+# =============================================================================
 # Fetch the sources files from both directories and a file list.
 #
 # Author: Meltwin

@@ -4,7 +4,7 @@
 # Definition of CMake targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/10/2025 (created 25/10/2025)
+# Date      25/11/2025 (created 12/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)

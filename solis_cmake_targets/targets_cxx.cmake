@@ -28,16 +28,16 @@ function(add_solis_executable _target)
     log_step("Registering CXX executable \"${_target}\"")
     get_files(src_files EXT ${CPP_SOURCE_EXT} ${CPP_HEADER_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
     if (NOT "${src_files}" STREQUAL "")
-        # Configure executable
-        add_executable(${_target} ${src_files})
-        add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
-        set_target_includes(${_target} ${_include_args})
-
-        # Register executable to be exported
-        register_solis_target(CXX_EXE "${_target}")
-    else()
         log_error("No source files found in the given FILES and DIRECTORIES tags for target \"${_target}\"")
-    endif()   
+    endif()
+    
+    # Configure executable
+    add_executable(${_target} ${src_files})
+    add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
+    set_target_includes(${_target} ${_include_args})
+
+    # Register executable to be exported
+    register_solis_target(CXX_EXE "${_target}")  
 endfunction()
 
 set(DEFAULT_HEADER_EXPORT_DIR "${PROJECT_NAME}")
@@ -69,10 +69,7 @@ function(add_solis_library _target)
     # Configure library
     register_solis_target(CXX_LIB "${_target}")
     add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
-    set(target_export_dir "${PROJECT_NAME}")
-    if (_HEADER_DIR)
-        set(target_export_dir "${_HEADER_DIR}")
-    endif()
+    set_or_default(target_export_dir _HEADER_DIR "${PROJECT_NAME}")
     log_debug("Configuring header export directory to ${target_export_dir}")
     set_target_properties(${_target} PROPERTIES HEADER_EXPORT_DIR ${target_export_dir})
 
