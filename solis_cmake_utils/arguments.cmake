@@ -4,7 +4,7 @@
 # This file contains util CMake methods.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      12/11/2025 (created 18/10/2025)
+# Date      25/11/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -56,7 +56,7 @@ function(get_files src_out)
   foreach(dir ${_DIRECTORY})
     foreach(ext ${_EXT})
       log_debug("Looking in ${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
-      file(GLOB_RECURSE src LIST_DIRECTORIES false RELATIVE ${PROJECT_SOURCE_DIR} "${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
+      file(GLOB_RECURSE src LIST_DIRECTORIES false RELATIVE ${PROJECT_SOURCE_DIR} CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
       list(APPEND src_files "${src}")
     endforeach()
   endforeach()

@@ -4,14 +4,18 @@
 # Target namespace mechanism to allow simpler usage in other packages.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      22/11/2025 (created 19/11/2025)
+# Date      25/11/2025 (created 19/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
 # =============================================================================
 
-set(PROJECT_NAMESPACE_DOCSTRING "Project's namespace")
-set(TARGET_NAMESPACE_DOCSTRING "Target's namespace")
+define_property(GLOBAL PROPERTY NAMESPACE 
+    BRIEF_DOCS "The project namespace's" 
+)
+define_property(TARGET PROPERTY NAMESPACE 
+    BRIEF_DOCS "The target namespace's"
+) 
 
 # =============================================================================
 # Get the target namespace.
@@ -26,46 +30,44 @@ set(TARGET_NAMESPACE_DOCSTRING "Target's namespace")
 # =============================================================================
 function(solis_namespace _out)
     cmake_parse_arguments("" "" "TARGET;SET" "" ${ARGN})
-    set(PRJ_NS "${PROJECT_NAME}_NAMESPACE")
-    set(TARGET_NS "${PROJECT_NAME}_${_TARGET}_NAMESPACE")
 
     # Get namespace
     # -----------------------------------------------------
     if ( "${_SET}" STREQUAL "" )  
         # A) Get project namespace    
         if ("${_TARGET}" STREQUAL "")   
-            # If no namespace was set before, default it to the project name
-            if ( "${${PRJ_NS}}" STREQUAL "")
-                set(${PRJ_NS} ${PROJECT_NAME} CACHE STRING "${PROJECT_NAMESPACE_DOCSTRING}" FORCE)
+            get_property(PRJ_NS GLOBAL PROPERTY NAMESPACE)
+            if ( "${PRJ_NS}" STREQUAL "")
+                solis_namespace(_global_ns SET ${PROJECT_NAME})
+                set(${_out} ${_global_ns})
+            else()
+                set(${_out} ${PRJ_NS})
             endif()
-            register_solis_namespace(${PRJ_NS})
-            set(${_out} ${${PRJ_NS}})
-
         # B) Get target namespace
         else()                          
-            if ( "${${TARGET_NS}}" STREQUAL "")
-                solis_namespace(_pkg_ns)
-                set(${TARGET_NS} ${_pkg_ns} CACHE STRING "${TARGET_NAMESPACE_DOCSTRING}" FORCE)
+            get_target_property(TARGET_NS ${_TARGET} NAMESPACE)   
+            if ( "${TARGET_NS}" STREQUAL "")
+                get_property(PRJ_NS GLOBAL PROPERTY NAMESPACE)
+                solis_namespace(_target_ns TARGET ${_TARGET} SET ${PRJ_NS})
+                set(${_out} ${_target_ns})
+            else()
+                set(${_out} ${TARGET_NS})
             endif()
-            register_solis_namespace(${TARGET_NS})
-            set(${_out} ${${TARGET_NS}})
-
         endif()
     # Set namespace
     # -----------------------------------------------------
     else()
         # A) Set project namespace    
         if ( "${_TARGET}" STREQUAL "" )
-            set(${PRJ_NS} ${_SET} CACHE STRING "${PROJECT_NAMESPACE_DOCSTRING}" FORCE)
-            register_solis_namespace(${PRJ_NS})
-            set(${_out} ${${PRJ_NS}})
+            set_property(GLOBAL PROPERTY NAMESPACE ${_SET})
+            set(${_out} ${_SET})
         # B) Set target namespace
         else()
-            set(${TARGET_NS} ${_SET} CACHE STRING "${TARGET_NAMESPACE_DOCSTRING}" FORCE)
-            register_solis_namespace(${TARGET_NS})
-            set(${_out} ${${TARGET_NS}})
+            set_target_properties(${_TARGET} PROPERTIES NAMESPACE ${_SET})
+            get_target_property(_target_ns "${_TARGET}" NAMESPACE)
+            set(${_out} ${_target_ns})
         endif()
     endif()
 
-    return(PROPAGATE ${_out} ${PRJ_NS} ${TARGET_NS})
+    return(PROPAGATE ${_out})
 endfunction()
