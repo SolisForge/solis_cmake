@@ -13,6 +13,8 @@
 set(CPP_SOURCE_EXT ".cpp" ".cxx" ".c")
 set(CPP_HEADER_EXT ".hpp" ".hxx" ".h")
 
+set(_SOLIS_INCLUDE_ARGS "PUBLIC_HEADER;PRIVATE_HEADER;HEADER_BASE_DIR")
+
 # =============================================================================
 # Register a target to compile a C/C++ executable
 #
@@ -20,7 +22,8 @@ set(CPP_HEADER_EXT ".hpp" ".hxx" ".h")
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_executable _target)
-    cmake_parse_arguments("" "" "" "FILES;DIRECTORIES;DEPENDS" ${ARGN})
+    cmake_parse_arguments(PARSE_ARGV 0 "" "" "" "FILES;DIRECTORIES;DEPENDS;${_SOLIS_INCLUDE_ARGS}")
+    get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
     
     log_step("Registering CXX executable \"${_target}\"")
     get_files(src_files EXT ${CPP_SOURCE_EXT} ${CPP_HEADER_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
@@ -28,7 +31,7 @@ function(add_solis_executable _target)
         # Configure executable
         add_executable(${_target} ${src_files})
         add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
-        set_target_includes(${_target} ${_UNPARSED_ARGUMENTS})
+        set_target_includes(${_target} ${_include_args})
 
         # Register executable to be exported
         register_solis_target(CXX_EXE "${_target}")
@@ -47,19 +50,20 @@ define_property(TARGET PROPERTY HEADER_EXPORT_DIR INITIALIZE_FROM_VARIABLE DEFAU
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_library _target)
-    cmake_parse_arguments("" "SHARED" "NAMESPACE;HEADER_DIR" "FILES;DIRECTORIES;DEPENDS" ${ARGN})
-    
+    cmake_parse_arguments(PARSE_ARGV 0 "" "SHARED" "NAMESPACE;HEADER_DIR;${_SOLIS_INCLUDE_ARGS}" "FILES;DIRECTORIES;DEPENDS")
+    get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
+        
     # Get source files for library
     get_files(src_files EXT ${CPP_SOURCE_EXT} FILE ${_FILES} DIRECTORY ${_DIRECTORIES})
     if ("${src_files}" STREQUAL "")
         log_step("Registering CXX library \"${_target}\" (INTERFACE)")
-        _solis_mk_interface(${_target} ${_UNPARSED_ARGUMENTS})
+        _solis_mk_interface(${_target} ${_include_args})
     elseif(${_SHARED})
         log_step("Registering CXX library \"${_target}\" (SHARED)")   
-        _solis_mk_shared_lib(${_target} SOURCES ${src_files} ${_UNPARSED_ARGUMENTS})
+        _solis_mk_shared_lib(${_target} ${_include_args} SOURCES ${src_files} )
     else()
         log_step("Registering CXX library \"${_target}\" (STATIC)")
-        _solis_mk_shared_lib(${_target} SOURCES ${src_files} ${_UNPARSED_ARGUMENTS})
+        _solis_mk_static_lib(${_target} ${_include_args} SOURCES ${src_files} )
     endif()   
 
     # Configure library
@@ -104,7 +108,8 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(_solis_mk_shared_lib)
-    cmake_parse_arguments("" "" "" "SOURCES;${_SOLIS_INCLUDE_ARGS}" ${ARGN})
+    cmake_parse_arguments("" "" "" "SOURCES" ${ARGN})
+    log_debug("Argn ${ARGN}")
 
     # Make library
     add_library(${_target} SHARED ${_SOURCES})
@@ -139,7 +144,6 @@ function(add_target_dependencies _target)
 endfunction()
 
 
-set(_SOLIS_INCLUDE_ARGS "PUBLIC_HEADER;PRIVATE_HEADER;HEADER_BASE_DIR")
 set(_SOLIS_PUB_HDRS_SET "pub_headers")
 
 # =============================================================================
@@ -149,6 +153,7 @@ set(_SOLIS_PUB_HDRS_SET "pub_headers")
 # Since : 1.0.0
 # =============================================================================
 function(set_target_includes _target) 
+    log_debug("Argn ${ARGN}")
     cmake_parse_arguments("" "INTERFACE" "" "${_SOLIS_INCLUDE_ARGS}" ${ARGN})
 
     # Process interface special case
@@ -165,9 +170,12 @@ function(set_target_includes _target)
         return()
     endif()
 
+    log_debug("Include ${_PUBLIC_HEADER}")
+
     # Add public headers for target
     foreach(include_obj ${_PUBLIC_HEADER})
         if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}")
+            log_debug("Linking include dir ${include_obj} for target \"${_target}\"")
             target_include_directories(${_target} PUBLIC 
                 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}> 
                 $<INSTALL_INTERFACE:${include_obj}>

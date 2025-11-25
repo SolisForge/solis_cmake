@@ -4,7 +4,7 @@
 # This file contains util CMake methods.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/11/2025 (created 18/10/2025)
+# Date      25/11/2025 (created 25/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -40,6 +40,26 @@ macro(check_one_flag)
     # Clear scope from local variables
     unset(_N_FLAGS)
     unset(_FLAGS)
+endmacro()
+
+# =============================================================================
+# Extract a portion of the parsed arguments and gather them in a string
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+macro(get_args_partition _out)    
+    cmake_parse_arguments("MACRO" "" "PREFIX" "" ${ARGN})
+    set(${_out} "")
+    foreach(arg ${MACRO_UNPARSED_ARGUMENTS})
+        if (${MACRO_PREFIX}_${arg})
+            log_debug("Adding argument ${arg} to partition ${_out}")
+            list(APPEND ${_out} ${arg})
+            list(APPEND ${_out} ${${MACRO_PREFIX}_${arg}})
+        endif()
+    endforeach()
+    unset(MACRO_UNPARSED_ARGUMENTS)
+    unset(MACRO_PREFIX)
 endmacro()
 
 # =============================================================================
