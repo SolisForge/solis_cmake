@@ -5,7 +5,7 @@
 # define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/11/2025 (created 25/11/2025)
+# Date      04/12/2025 (created 04/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -49,7 +49,6 @@ function(_solis_install_cxx)
         log_debug("Setup installation of target ${_target}")
 
         # Get target custom property
-        get_target_property(header_export_dir ${_target} HEADER_EXPORT_DIR)
 
         install(TARGETS ${_target}
             EXPORT "${PROJECT_NAME}Targets"
@@ -59,9 +58,9 @@ function(_solis_install_cxx)
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR} # MacOS
             # Header files
-            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${header_export_dir}
-            PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${header_export_dir}
-            FILE_SET ${_SOLIS_PUB_HDRS_SET}  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${header_export_dir}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILE_SET ${_SOLIS_PUB_HDRS_SET}  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         )
     endforeach()
     
