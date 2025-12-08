@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      05/12/2025 (created 04/12/2025)
+# Date      08/12/2025 (created 08/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -150,18 +150,19 @@ function(set_target_includes _target)
     # Process interface special case
     if (_INTERFACE) 
         get_files(headers_files EXT ${CPP_HEADER_EXT} DIRECTORY ${_PUBLIC_HEADER} ${_PRIVATE_HEADER})
-        target_sources(
-            ${_target}
-            INTERFACE
-            FILE_SET "${_SOLIS_PUB_HDRS_SET}"
-                TYPE HEADERS
-                FILES ${headers_files}
-                BASE_DIRS "${_HEADER_BASE_DIR}"
-        )
+        foreach(include_obj ${headers_files})
+            get_filename_component(base_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}" DIRECTORY)
+            target_sources(
+                ${_target}
+                INTERFACE
+                FILE_SET ${_SOLIS_PUB_HDRS_SET}
+                    TYPE HEADERS
+                    FILES "${include_obj}"
+                    BASE_DIRS "${base_dir}"
+            )
+        endforeach()
         return()
     endif()
-
-    log_debug("Include ${_PUBLIC_HEADER}")
 
     # Add public headers for target
     foreach(include_obj ${_PUBLIC_HEADER})
@@ -172,13 +173,14 @@ function(set_target_includes _target)
                 $<INSTALL_INTERFACE:${include_obj}>
             )            
         else()
+            get_filename_component(base_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}" DIRECTORY)
             target_sources(
                 ${_target}
                 PUBLIC
                 FILE_SET ${_SOLIS_PUB_HDRS_SET}
                     TYPE HEADERS
                     FILES "${include_obj}"
-                    BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}"
+                    BASE_DIRS "${base_dir}"
             )
         endif()
     endforeach()
