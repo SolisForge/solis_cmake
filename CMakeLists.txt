@@ -4,7 +4,7 @@
 # Configuration file for this project
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/11/2025 (created 25/11/2025)
+# Date      08/12/2025 (created 08/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -68,7 +68,6 @@ ExternalProject_Add(
 add_solis_library( doctest
     PUBLIC_HEADER "libs/doctest/doctest"
     HEADER_BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/doctest"
-    HEADER_DIR solis_ext
     NAMESPACE solis_external
 )
 

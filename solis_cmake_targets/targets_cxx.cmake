@@ -158,7 +158,7 @@ function(set_target_includes _target)
                 FILE_SET ${_SOLIS_PUB_HDRS_SET}
                     TYPE HEADERS
                     FILES "${include_obj}"
-                    BASE_DIRS "${base_dir}"
+                    BASE_DIRS "${_HEADER_BASE_DIR}"
             )
         endforeach()
         return()
@@ -180,7 +180,7 @@ function(set_target_includes _target)
                 FILE_SET ${_SOLIS_PUB_HDRS_SET}
                     TYPE HEADERS
                     FILES "${include_obj}"
-                    BASE_DIRS "${base_dir}"
+                    BASE_DIRS "${_HEADER_BASE_DIR}"
             )
         endif()
     endforeach()
