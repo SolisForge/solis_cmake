@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/11/2025 (created 25/11/2025)
+# Date      08/12/2025 (created 08/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -50,7 +50,7 @@ define_property(TARGET PROPERTY HEADER_EXPORT_DIR INITIALIZE_FROM_VARIABLE DEFAU
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_library _target)
-    cmake_parse_arguments(PARSE_ARGV 0 "" "SHARED" "NAMESPACE;HEADER_DIR;${_SOLIS_INCLUDE_ARGS}" "FILES;DIRECTORIES;DEPENDS")
+    cmake_parse_arguments(PARSE_ARGV 0 "" "SHARED" "NAMESPACE;${_SOLIS_INCLUDE_ARGS}" "FILES;DIRECTORIES;DEPENDS")
     get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
         
     # Get source files for library
@@ -69,10 +69,6 @@ function(add_solis_library _target)
     # Configure library
     register_solis_target(CXX_LIB "${_target}")
     add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
-    set_or_default(target_export_dir _HEADER_DIR "${PROJECT_NAME}")
-    log_debug("Configuring header export directory to ${target_export_dir}")
-    set_target_properties(${_target} PROPERTIES HEADER_EXPORT_DIR ${target_export_dir})
-
 
     # Register library to be exported
     solis_namespace(_ns TARGET ${_target} SET ${_NAMESPACE})
@@ -154,18 +150,19 @@ function(set_target_includes _target)
     # Process interface special case
     if (_INTERFACE) 
         get_files(headers_files EXT ${CPP_HEADER_EXT} DIRECTORY ${_PUBLIC_HEADER} ${_PRIVATE_HEADER})
-        target_sources(
-            ${_target}
-            INTERFACE
-            FILE_SET "${_SOLIS_PUB_HDRS_SET}"
-                TYPE HEADERS
-                FILES ${headers_files}
-                BASE_DIRS "${_HEADER_BASE_DIR}"
-        )
+        foreach(include_obj ${headers_files})
+            get_filename_component(base_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}" DIRECTORY)
+            target_sources(
+                ${_target}
+                INTERFACE
+                FILE_SET ${_SOLIS_PUB_HDRS_SET}
+                    TYPE HEADERS
+                    FILES "${include_obj}"
+                    BASE_DIRS "${_HEADER_BASE_DIR}"
+            )
+        endforeach()
         return()
     endif()
-
-    log_debug("Include ${_PUBLIC_HEADER}")
 
     # Add public headers for target
     foreach(include_obj ${_PUBLIC_HEADER})
@@ -176,13 +173,14 @@ function(set_target_includes _target)
                 $<INSTALL_INTERFACE:${include_obj}>
             )            
         else()
+            get_filename_component(base_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}" DIRECTORY)
             target_sources(
                 ${_target}
                 PUBLIC
                 FILE_SET ${_SOLIS_PUB_HDRS_SET}
                     TYPE HEADERS
                     FILES "${include_obj}"
-                    BASE_DIRS ${_HEADER_BASE_DIR}
+                    BASE_DIRS "${_HEADER_BASE_DIR}"
             )
         endif()
     endforeach()
