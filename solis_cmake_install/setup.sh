@@ -20,14 +20,18 @@ function add_to_path() {
     fi
 }
 function _resolve_sourced_file_directory() {
-    local -r shell_type="$(cat /proc/$$/comm)"
-
     # When sourcing a file, zsh give its path as $0 and not in BASH_SOURCE
-    if [[ "$shell_type" =~ zsh ]]; then
+    # shellcheck disable=SC2128
+    {
+    if [[ ! -z "$ZSH_VERSION" ]]; then
         resolve_path "$1"
-    elif [[ "$shell_type" =~ bash ]]; then
+   
+    elif [[ ! -z "$BASH_VERSINFO" ]]; then 
         resolve_path "${BASH_SOURCE[0]}"
+    else
+        echo "/dev/null"
     fi
+    }
 }
 SOLIS_WS_INSTALL_ROOT=$(_resolve_sourced_file_directory "$0")
 
