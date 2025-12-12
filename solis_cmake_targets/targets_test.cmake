@@ -19,8 +19,13 @@ set(_SOLIS_TESTS_TYPE "PYTHON;CPP")
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_test _target)
-    cmake_parse_arguments(ARGV 0 "" "${_SOLIS_TESTS_TYPE}" "" "")
+    # If tests are disabled
+    if (NOT ${COMPILE_TESTS})
+        return()
+    endif()
 
+    # Make the right type of test
+    cmake_parse_arguments(PARSE_ARGV 1 "" "${_SOLIS_TESTS_TYPE}" "" "")
     if (${_CPP})
         _add_solis_cpp_test(${_target} ${_UNPARSED_ARGUMENTS})
     elseif(${_PYTHON})
@@ -37,7 +42,8 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(_add_solis_cpp_test _target)
-    cmake_parse_arguments(ARGV 0 "" "${_SOLIS_TESTS_TYPE}" "" "")
+    log_step("Registering test \"${_target}\" (C++)")
+    cmake_parse_arguments(PARSE_ARGV 0 "" "" "" "")
     add_solis_executable("test_${_target}" ${_UNPARSED_ARGUMENTS})
     add_test(NAME ${_target} COMMAND "test_${_target}")
 endfunction()
@@ -49,5 +55,23 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(_add_solis_python_test _target)
-    # TODO: implements unittest CTest running
+    log_step("Registering test \"${_target}\" (PYTHON)")
+    cmake_parse_arguments(PARSE_ARGV 1 "" "" "" "DIRECTORY")
+    log_output("ARGN ${ARGN} (${_UNPARSED_ARGUMENTS}) => ${_DIRECTORY}"  )
+
+    if ("${_DIRECTORY}" STREQUAL "")
+        log_warning("Python test ${_target} does not have any directory given!")
+        return()
+    endif()
+
+    # Register the tests directories with a unique name
+    set(index 0)
+    foreach(dir ${_DIRECTORY})
+        add_test(
+            NAME "${_target}_${index}" 
+            COMMAND python3 -m unittest discover "${CMAKE_CURRENT_SOURCE_DIR}/${_DIRECTORY}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${_DIRECTORY}"
+        )    
+        math(EXPR index "${index} + 1")
+    endforeach()
 endfunction()
