@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      08/12/2025 (created 08/12/2025)
+# Date      12/12/2025 (created 10/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -13,6 +13,8 @@
 set(CPP_SOURCE_EXT ".cpp" ".cxx" ".c")
 set(CPP_HEADER_EXT ".hpp" ".hxx" ".h")
 
+set(_SOLIS_CPP_TARGETS_FLAGS "NO_EXPORT")
+set(_SOLIS_CPP_TARGETS_ARGS "FILES;DIRECTORIES;DEPENDS")
 set(_SOLIS_INCLUDE_ARGS "PUBLIC_HEADER;PRIVATE_HEADER;HEADER_BASE_DIR")
 
 # =============================================================================
@@ -22,7 +24,7 @@ set(_SOLIS_INCLUDE_ARGS "PUBLIC_HEADER;PRIVATE_HEADER;HEADER_BASE_DIR")
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_executable _target)
-    cmake_parse_arguments(PARSE_ARGV 0 "" "" "" "FILES;DIRECTORIES;DEPENDS;${_SOLIS_INCLUDE_ARGS}")
+    cmake_parse_arguments(PARSE_ARGV 0 "" "${_SOLIS_CPP_TARGETS_FLAGS}" "${_SOLIS_INCLUDE_ARGS}" "${_SOLIS_CPP_TARGETS_ARGS}")
     get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
     
     log_step("Registering CXX executable \"${_target}\"")
@@ -37,7 +39,13 @@ function(add_solis_executable _target)
     set_target_includes(${_target} ${_include_args})
 
     # Register executable to be exported
-    register_solis_target(CXX_EXE "${_target}")  
+    if (${_NO_EXPORT})
+        log_debug("Executable ${_target} is INTERNAL")
+    else()
+        log_debug("Executable ${_target} is EXPORTED")
+        register_solis_target(CXX_EXE "${_target}")  
+    endif()
+    
 endfunction()
 
 set(DEFAULT_HEADER_EXPORT_DIR "${PROJECT_NAME}")
@@ -50,7 +58,7 @@ define_property(TARGET PROPERTY HEADER_EXPORT_DIR INITIALIZE_FROM_VARIABLE DEFAU
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_library _target)
-    cmake_parse_arguments(PARSE_ARGV 0 "" "SHARED" "NAMESPACE;${_SOLIS_INCLUDE_ARGS}" "FILES;DIRECTORIES;DEPENDS")
+    cmake_parse_arguments(PARSE_ARGV 0 "" "${_SOLIS_CPP_TARGETS_FLAGS};SHARED" "NAMESPACE;${_SOLIS_INCLUDE_ARGS}" "${_SOLIS_CPP_TARGETS_ARGS}")
     get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
         
     # Get source files for library
@@ -67,16 +75,20 @@ function(add_solis_library _target)
     endif()   
 
     # Configure library
-    register_solis_target(CXX_LIB "${_target}")
     add_target_dependencies(${_target} DEPENDS ${_DEPENDS})
 
     # Register library to be exported
-    solis_namespace(_ns TARGET ${_target} SET ${_NAMESPACE})
-    set(lib_alias "${_ns}::${_target}")
-    log_debug("Exporting library as ${lib_alias}")
-    add_library(${lib_alias} ALIAS ${_target})
-    set_target_properties(${_target} PROPERTIES OUTPUT_NAME "${_ns}_${_target}")
-    set_target_properties(${_target} PROPERTIES EXPORT_NAME ${lib_alias})
+    if (${_NO_EXPORT})
+        log_debug("Library ${_target} is INTERNAL")
+    else()
+        solis_namespace(_ns TARGET ${_target} SET ${_NAMESPACE})
+        set(lib_alias "${_ns}::${_target}")
+        log_debug("Library ${_target} is EXPORTED as ${lib_alias}")
+        add_library(${lib_alias} ALIAS ${_target})
+        register_solis_target(CXX_LIB "${_target}")
+        set_target_properties(${_target} PROPERTIES OUTPUT_NAME "${_ns}_${_target}")
+        set_target_properties(${_target} PROPERTIES EXPORT_NAME ${lib_alias})
+    endif()
 endfunction()
 
 
