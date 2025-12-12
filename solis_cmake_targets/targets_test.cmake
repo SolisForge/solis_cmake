@@ -44,7 +44,7 @@ endfunction()
 function(_add_solis_cpp_test _target)
     log_step("Registering test \"${_target}\" (C++)")
     cmake_parse_arguments(PARSE_ARGV 0 "" "" "" "")
-    add_solis_executable("test_${_target}" ${_UNPARSED_ARGUMENTS})
+    add_solis_executable("test_${_target}" ${_UNPARSED_ARGUMENTS} NO_EXPORT)
     add_test(NAME ${_target} COMMAND "test_${_target}")
 endfunction()
 
