@@ -4,7 +4,7 @@
 # This file contains util CMake methods.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      12/11/2025 (created 18/10/2025)
+# Date      25/11/2025 (created 25/11/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -43,6 +43,41 @@ macro(check_one_flag)
 endmacro()
 
 # =============================================================================
+# Extract a portion of the parsed arguments and gather them in a string
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+macro(get_args_partition _out)    
+    cmake_parse_arguments("MACRO" "" "PREFIX" "" ${ARGN})
+    set(${_out} "")
+    foreach(arg ${MACRO_UNPARSED_ARGUMENTS})
+        if (${MACRO_PREFIX}_${arg})
+            log_debug("Adding argument ${arg} to partition ${_out}")
+            list(APPEND ${_out} ${arg})
+            list(APPEND ${_out} ${${MACRO_PREFIX}_${arg}})
+        endif()
+    endforeach()
+    unset(MACRO_UNPARSED_ARGUMENTS)
+    unset(MACRO_PREFIX)
+endmacro()
+
+# =============================================================================
+# Set the out variable with the value contained in _var_in if it exist, else
+# set it with the given default value
+#
+# Author: Meltwin
+# Since : 1.0.0
+# =============================================================================
+function(set_or_default _out _var_in _default)    
+    if (${_var_in})
+        set(${_out} "${${_var_in}}" PARENT_SCOPE)
+    else()
+        set(${_out} "${_default}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+# =============================================================================
 # Fetch the sources files from both directories and a file list.
 #
 # Author: Meltwin
@@ -56,7 +91,7 @@ function(get_files src_out)
   foreach(dir ${_DIRECTORY})
     foreach(ext ${_EXT})
       log_debug("Looking in ${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
-      file(GLOB_RECURSE src LIST_DIRECTORIES false RELATIVE ${PROJECT_SOURCE_DIR} "${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
+      file(GLOB_RECURSE src LIST_DIRECTORIES false RELATIVE ${PROJECT_SOURCE_DIR} CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/${dir}/**${ext}")
       list(APPEND src_files "${src}")
     endforeach()
   endforeach()

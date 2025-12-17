@@ -63,7 +63,8 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(_solis_config_dependencies)
-    get_from_solis_cache(PROJECT _deps DEPENDENCIES)
+    get_property(_deps GLOBAL PROPERTY PROJECT_DEPS)
+    log_debug("Project dependencies: ${_deps}")
     list(LENGTH _deps _n_deps)
     if (_n_deps GREATER 0)
         # Write header

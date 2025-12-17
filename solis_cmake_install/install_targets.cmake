@@ -5,7 +5,7 @@
 # define in the project.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      08/11/2025 (created 27/10/2025)
+# Date      04/12/2025 (created 04/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -40,23 +40,36 @@ endfunction()
 function(_solis_install_cxx)
   get_solis_targets(_targets CXX_EXE CXX_LIB)
   list(LENGTH _targets _length)
+  
   if (_length GREATER 0)
     log_step("Exporting CXX targets (${_length} target)")
-    install(TARGETS ${_targets}
-      EXPORT "${PROJECT_NAME}Targets"
-      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-      INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-      PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/include
-      BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
+
+    # Install targets
+    foreach( _target ${_targets})
+        log_debug("Setup installation of target ${_target}")
+
+        # Get target custom property
+
+        install(TARGETS ${_target}
+            EXPORT "${PROJECT_NAME}Targets"
+            # Target export
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR} # MacOS
+            # Header files
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILE_SET ${_SOLIS_PUB_HDRS_SET}  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        )
+    endforeach()
+    
     # Export package's targets files
     export(EXPORT "${PROJECT_NAME}Targets"
       FILE "${PROJECT_BINARY_DIR}/share/${PROJECT_NAME}/cmake/${PROJECT_NAME}Targets.cmake"
     )
     install(EXPORT "${PROJECT_NAME}Targets"
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/share/${PROJECT_NAME}
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}
     )
   endif()
 endfunction()

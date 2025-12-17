@@ -4,7 +4,7 @@
 # This file contains all the function related to manipulating the cache
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      19/11/2025 (created 18/10/2025)
+# Date      25/11/2025 (created 18/10/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -19,7 +19,6 @@ macro(_register_solis_cache _reg)
 endmacro()
 include(${CMAKE_CURRENT_LIST_DIR}/cache/targets.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cache/project.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/cache/namespace.cmake)
 
 # =============================================================================
 # Clear all cached registers defined by the solis environment.
