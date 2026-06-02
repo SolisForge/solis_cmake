@@ -33,12 +33,29 @@ function _resolve_sourced_file_directory() {
     fi
     }
 }
+function solis_exit() {
+    export PATH
+    export PYTHONPATH
+    export LD_LIBRARY_PATH
+
+    # Remove this workspace from the paths
+    export PS1="$OLD_PS1"
+    PATH=$(remove_from_path "$SOLIS_WS_INSTALL_ROOT/bin" "$PATH")
+    PYTHONPATH=$(remove_from_path "$SOLIS_WS_INSTALL_ROOT/lib/python3/dist-packages" "$PYTHONPATH")
+    LD_LIBRARY_PATH=$(remove_from_path "$SOLIS_WS_INSTALL_ROOT/lib" "$LD_LIBRARY_PATH")
+}
 SOLIS_WS_INSTALL_ROOT=$(_resolve_sourced_file_directory "$0")
 
+export PS1
 export PATH
 export PYTHONPATH
 export LD_LIBRARY_PATH
 
+# Setup PS1 to indicate a solis environment
+if ! [[ "$PS1" =~ .*[SOLIS].* ]]; then
+    export OLD_PS1="$PS1"
+    PS1="[SOLIS] $PS1"
+fi
 # Setup paths for this workspace
 PATH=$(add_to_path "$SOLIS_WS_INSTALL_ROOT/bin" "$PATH")
 PYTHONPATH=$(add_to_path "$SOLIS_WS_INSTALL_ROOT/lib/python3/dist-packages" "$PYTHONPATH")

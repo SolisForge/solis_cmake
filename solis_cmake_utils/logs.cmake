@@ -4,7 +4,7 @@
 # This file contains the function definition to display message
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/10/2025 (created 25/10/2025)
+# Date      26/05/2026 (created 04/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -56,7 +56,7 @@ endfunction()
 # Since : 1.0.0
 # =============================================================================
 function(log_debug msg)
-    message(VERBOSE "${msg}")
+    message(VERBOSE "${TERM_DIM_WHITE}${msg}")
 endfunction()
 
 # =============================================================================
