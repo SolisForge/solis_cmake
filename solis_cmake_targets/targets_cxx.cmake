@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      08/06/2026 (created 26/12/2025)
+# Date      08/06/2026 (created 08/06/2026)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -186,8 +186,12 @@ function(set_target_includes _target)
             log_debug("Linking include dir ${include_obj} for target \"${_target}\"")
             target_include_directories(${_target} PUBLIC 
                 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}> 
-                $<INSTALL_INTERFACE:${include_obj}>
+                $<INSTALL_INTERFACE:>
             )            
+            install(
+                DIRECTORY ${include_obj}/
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            )
         else()
             get_filename_component(base_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_obj}" DIRECTORY)
             target_sources(
