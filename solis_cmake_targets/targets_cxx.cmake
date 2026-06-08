@@ -4,7 +4,7 @@
 # Definition of C/C++ targets
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      12/12/2025 (created 10/12/2025)
+# Date      08/06/2026 (created 26/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -58,7 +58,11 @@ define_property(TARGET PROPERTY HEADER_EXPORT_DIR INITIALIZE_FROM_VARIABLE DEFAU
 # Since : 1.0.0
 # =============================================================================
 function(add_solis_library _target)
-    cmake_parse_arguments(PARSE_ARGV 0 "" "${_SOLIS_CPP_TARGETS_FLAGS};SHARED" "NAMESPACE;${_SOLIS_INCLUDE_ARGS}" "${_SOLIS_CPP_TARGETS_ARGS}")
+    cmake_parse_arguments(PARSE_ARGV 0 "" 
+        "${_SOLIS_CPP_TARGETS_FLAGS};SHARED" 
+        "NAMESPACE;${_SOLIS_INCLUDE_ARGS}" 
+        "${_SOLIS_CPP_TARGETS_ARGS}"
+    )
     get_args_partition(_include_args ${_SOLIS_INCLUDE_ARGS})
         
     # Get source files for library
@@ -81,7 +85,7 @@ function(add_solis_library _target)
     if (${_NO_EXPORT})
         log_debug("Library ${_target} is INTERNAL")
     else()
-        solis_namespace(_ns TARGET ${_target} SET ${_NAMESPACE})
+        solis_namespace(_ns TARGET ${_target} SET "${_NAMESPACE}")
         set(lib_alias "${_ns}::${_target}")
         log_debug("Library ${_target} is EXPORTED as ${lib_alias}")
         add_library(${lib_alias} ALIAS ${_target})

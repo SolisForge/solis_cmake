@@ -4,7 +4,7 @@
 # Target namespace mechanism to allow simpler usage in other packages.
 # 
 # Author    Meltwin (github@meltwin.fr)
-# Date      25/11/2025 (created 19/11/2025)
+# Date      08/06/2026 (created 18/12/2025)
 # Version   1.0.0
 # Copyright Solis Forge | 2025 
 #           Distributed under MIT License (https://opensource.org/licenses/MIT)
@@ -37,17 +37,17 @@ function(solis_namespace _out)
         # A) Get project namespace    
         if ("${_TARGET}" STREQUAL "")   
             get_property(PRJ_NS GLOBAL PROPERTY NAMESPACE)
-            if ( "${PRJ_NS}" STREQUAL "")
-                solis_namespace(_global_ns SET ${PROJECT_NAME})
+            if ( NOT PRJ_NS OR "${PRJ_NS}" STREQUAL "")
+                solis_namespace(_global_ns SET "${PROJECT_NAME}")
                 set(${_out} ${_global_ns})
             else()
                 set(${_out} ${PRJ_NS})
             endif()
         # B) Get target namespace
-        else()                          
+        else()        
             get_target_property(TARGET_NS ${_TARGET} NAMESPACE)   
-            if ( "${TARGET_NS}" STREQUAL "")
-                get_property(PRJ_NS GLOBAL PROPERTY NAMESPACE)
+            if ( NOT TARGET_NS OR "${TARGET_NS}" STREQUAL "")
+                solis_namespace(PRJ_NS)
                 solis_namespace(_target_ns TARGET ${_TARGET} SET ${PRJ_NS})
                 set(${_out} ${_target_ns})
             else()
